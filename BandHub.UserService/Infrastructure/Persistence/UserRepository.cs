@@ -21,8 +21,8 @@ public class UserRepository : IUserRepository
     public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _context.Users
-            .OrderBy(x => x.CreatedAt)
-            .ToListAsync(cancellationToken);
+                        .OrderBy(x => x.CreatedAt)
+                        .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken)

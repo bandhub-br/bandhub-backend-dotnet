@@ -1,4 +1,7 @@
-using BandHub.UserService.Data;
+using BandHub.UserService.Common;
+using BandHub.UserService.Features.Users.CreateUser;
+using BandHub.UserService.Features.Users.GetUsers;
+using BandHub.UserService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,10 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddUserService(builder.Configuration);
 
 var app = builder.Build();
 
@@ -23,8 +26,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
-app.MapControllers();
+app.MapCreateUserEndpoint();
+app.MapGetUsersEndpoint();
 
 app.Run();

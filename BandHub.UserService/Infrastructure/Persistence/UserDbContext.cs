@@ -1,7 +1,7 @@
-﻿using BandHub.UserService.Models;
+using BandHub.UserService.Features.Users.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace BandHub.UserService.Data;
+namespace BandHub.UserService.Infrastructure.Persistence;
 
 public class UserDbContext : DbContext
 {

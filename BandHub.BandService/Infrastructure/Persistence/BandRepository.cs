@@ -11,6 +11,13 @@ public class BandRepository : IBandRepository
     {
         _context = context;
     }
+
+    public async Task<bool> AccountIdExists(Guid accountId, CancellationToken cancellationToken)
+    {
+        return await _context.Bands
+            .AnyAsync(x => x.AccountId == accountId, cancellationToken);
+    }
+
     public async Task AddAsync(Band band, CancellationToken cancellationToken)
     {
         await _context.Bands.AddAsync(band, cancellationToken);

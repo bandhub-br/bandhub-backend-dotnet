@@ -3,6 +3,7 @@ using System;
 using BandHub.BandService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BandHub.BandService.Migrations
 {
     [DbContext(typeof(BandDbContext))]
-    partial class BandDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260311021455_ReplaceBandCredentialsWithAccountId")]
+    partial class ReplaceBandCredentialsWithAccountId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +27,7 @@ namespace BandHub.BandService.Migrations
 
             modelBuilder.Entity("BandHub.BandService.Features.Bands.Domain.Band", b =>
                 {
-                    b.Property<Guid>("AccountId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -41,9 +44,6 @@ namespace BandHub.BandService.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -53,10 +53,7 @@ namespace BandHub.BandService.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.HasKey("AccountId");
-
-                    b.HasIndex("AccountId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();

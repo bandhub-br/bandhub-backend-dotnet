@@ -22,9 +22,9 @@ public class GetBandsHandlerTests
         // Arrange
         var bands = new List<Band>
         {
-            new("Arctic Monkeys", "Indie Rock", "Banda inglesa"),
-            new("Tame Impala", "Psychedelic Rock", "Projeto australiano"),
-            new("Radiohead", "Alternative Rock", "Banda inglesa experimental")
+            new(Guid.NewGuid(), "Arctic Monkeys", "Indie Rock", "Banda inglesa"),
+            new(Guid.NewGuid(), "Tame Impala", "Psychedelic Rock", "Projeto australiano"),
+            new(Guid.NewGuid(), "Radiohead", "Alternative Rock", "Banda inglesa experimental")
         };
 
         _bandRepositoryMock
@@ -71,7 +71,8 @@ public class GetBandsHandlerTests
     public async Task HandleAsync_ShouldReturnCorrectResponseFormat_WhenBandsExist()
     {
         // Arrange
-        var band = new Band("Arctic Monkeys", "Indie Rock", "Banda inglesa de indie rock", "7Ln80lUS6He07XvHI8qqHH");
+        var accountId = Guid.NewGuid();
+        var band = new Band(accountId, "Arctic Monkeys", "Indie Rock", "Banda inglesa de indie rock", "7Ln80lUS6He07XvHI8qqHH");
         _bandRepositoryMock
             .Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Band> { band });
@@ -83,6 +84,7 @@ public class GetBandsHandlerTests
         result.Should().HaveCount(1);
         var response = result[0];
         response.Id.Should().Be(band.Id);
+        response.AccountId.Should().Be(accountId);
         response.Name.Should().Be(band.Name);
         response.Genre.Should().Be(band.Genre);
         response.Description.Should().Be(band.Description);
@@ -94,8 +96,8 @@ public class GetBandsHandlerTests
     public async Task HandleAsync_ShouldMapAllBandProperties_WhenMultipleBandsExist()
     {
         // Arrange
-        var band1 = new Band("Band One", "Rock", "Descrição um");
-        var band2 = new Band("Band Two", "Pop", "Descrição dois", "spotify123");
+        var band1 = new Band(Guid.NewGuid(), "Band One", "Rock", "Descrição um");
+        var band2 = new Band(Guid.NewGuid(), "Band Two", "Pop", "Descrição dois", "spotify123");
 
         _bandRepositoryMock
             .Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
@@ -108,6 +110,7 @@ public class GetBandsHandlerTests
         result.Should().HaveCount(2);
 
         result[0].Id.Should().Be(band1.Id);
+        result[0].AccountId.Should().Be(band1.AccountId);
         result[0].Name.Should().Be(band1.Name);
         result[0].Genre.Should().Be(band1.Genre);
         result[0].Description.Should().Be(band1.Description);
@@ -115,6 +118,7 @@ public class GetBandsHandlerTests
         result[0].CreatedAt.Should().Be(band1.CreatedAt);
 
         result[1].Id.Should().Be(band2.Id);
+        result[1].AccountId.Should().Be(band2.AccountId);
         result[1].Name.Should().Be(band2.Name);
         result[1].Genre.Should().Be(band2.Genre);
         result[1].Description.Should().Be(band2.Description);

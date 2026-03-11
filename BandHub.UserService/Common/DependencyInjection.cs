@@ -1,6 +1,7 @@
-using BandHub.UserService.Features.Users.CreateUser;
-using BandHub.UserService.Features.Users.Domain;
-using BandHub.UserService.Features.Users.GetUsers;
+using BandHub.UserService.Features.Accounts.CreateAccount;
+using BandHub.UserService.Features.Accounts.Domain;
+using BandHub.UserService.Features.Accounts.GetAccounts;
+using BandHub.UserService.Features.Accounts.Login;
 using BandHub.UserService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,13 +11,14 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddUserService(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<UserDbContext>(options =>
+        services.AddDbContext<AccountDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
 
-        services.AddScoped<CreateUserHandler>();
-        services.AddScoped<GetUsersHandler>();
+        services.AddScoped<RegisterAccountHandler>();
+        services.AddScoped<GetAccountsHandler>();
+        services.AddScoped<LoginHandler>();
 
         return services;
     }

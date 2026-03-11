@@ -19,6 +19,11 @@ public class BandDbContext : DbContext
 
             entity.HasKey(x => x.Id);
 
+            entity.HasKey(x => x.AccountId);
+
+            entity.HasIndex(x => x.AccountId)
+                .IsUnique();
+
             entity.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(150);

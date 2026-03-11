@@ -1,8 +1,8 @@
-namespace BandHub.UserService.Features.Users.CreateUser;
+namespace BandHub.UserService.Features.Accounts.CreateAccount;
 
-public class CreateUserValidator
+public class RegisterAccountValidator
 {
-    public List<string> Validate(CreateUserRequest request)
+    public List<string> Validate(RegisterAccountRequest request)
     {
         var errors = new List<string>();
 

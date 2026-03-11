@@ -13,7 +13,7 @@ public class GetBandsHandler
     {
         var bands = await _bandRepository.GetAllAsync(cancellationToken);
         return bands
-            .Select(band => new GetBandsResponse(band.Id, band.Name, band.Genre, band.Description, band.SpotifyId, band.CreatedAt))
+            .Select(band => new GetBandsResponse(band.Id, band.AccountId, band.Name, band.Genre, band.Description, band.SpotifyId, band.CreatedAt))
             .ToList();
     }
 }

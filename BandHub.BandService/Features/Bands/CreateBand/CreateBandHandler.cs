@@ -20,8 +20,8 @@ public class CreateBandHandler
         var nameExists = await _bandRepository.NameExistsAsync(request.Name, cancellationToken);
         if (nameExists)
             throw new InvalidOperationException("Band name already exists.");
-        var band = new Band(request.Name, request.Genre, request.Description);
+        var band = new Band(request.AccountId, request.Name, request.Genre, request.Description);
         await _bandRepository.AddAsync(band, cancellationToken);
-        return new CreateBandResponse(band.Id, band.Name, band.Genre, band.Description, band.SpotifyId, band.CreatedAt);
+        return new CreateBandResponse(band.Id, band.AccountId, band.Name, band.Genre, band.Description, band.SpotifyId, band.CreatedAt);
     }
 }

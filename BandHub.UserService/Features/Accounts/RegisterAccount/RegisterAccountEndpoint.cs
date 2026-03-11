@@ -1,20 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace BandHub.UserService.Features.Users.CreateUser;
+namespace BandHub.UserService.Features.Accounts.CreateAccount;
 
-public static class CreateUserEndpoint
+public static class RegisterAccountEndpoint
 {
-    public static IEndpointRouteBuilder MapCreateUserEndpoint(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder MapCreateAccountEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/users", async (
-            [FromBody] CreateUserRequest request,
-            CreateUserHandler handler,
+        app.MapPost("/accounts/register", async (
+            [FromBody] RegisterAccountRequest request,
+            RegisterAccountHandler handler,
             CancellationToken cancellationToken) =>
         {
             try
             {
                 var response = await handler.HandleAsync(request, cancellationToken);
-                return Results.Created($"/users/{response.Id}", response);
+                return Results.Created($"/accounts/{response.Id}", response);
             }
             catch (ArgumentException ex)
             {
@@ -25,8 +25,8 @@ public static class CreateUserEndpoint
                 return Results.Conflict(new { message = ex.Message });
             }
         })
-        .WithName("CreateUser")
-        .WithTags("Users");
+        .WithName("CreateAccount")
+        .WithTags("Accounts");
 
         return app;
     }

@@ -1,22 +1,23 @@
-using BandHub.UserService.Features.Users.CreateUser;
+using BandHub.UserService.Features.Accounts.CreateAccount;
+using BandHub.UserService.Features.Accounts.Domain;
 using FluentAssertions;
 
-namespace BandHub.UserService.UnitTests.Features.Users.CreateUser;
+namespace BandHub.UserService.UnitTests.Features.Accounts.CreateAccount;
 
-public class CreateUserValidatorTests
+public class CreateAccountValidatorTests
 {
-    private readonly CreateUserValidator _validator;
+    private readonly RegisterAccountValidator _validator;
 
-    public CreateUserValidatorTests()
+    public CreateAccountValidatorTests()
     {
-        _validator = new CreateUserValidator();
+        _validator = new RegisterAccountValidator();
     }
 
     [Fact]
     public void Validate_ShouldReturnError_WhenNameIsEmpty()
     {
         // Arrange
-        var request = new CreateUserRequest("", "test@example.com", "password123");
+        var request = new RegisterAccountRequest("", "test@example.com", "password123", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);
@@ -29,7 +30,7 @@ public class CreateUserValidatorTests
     public void Validate_ShouldReturnError_WhenNameIsWhitespace()
     {
         // Arrange
-        var request = new CreateUserRequest("   ", "test@example.com", "password123");
+        var request = new RegisterAccountRequest("   ", "test@example.com", "password123", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);
@@ -42,7 +43,7 @@ public class CreateUserValidatorTests
     public void Validate_ShouldReturnError_WhenEmailIsEmpty()
     {
         // Arrange
-        var request = new CreateUserRequest("John Doe", "", "password123");
+        var request = new RegisterAccountRequest("John Doe", "", "password123", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);
@@ -55,7 +56,7 @@ public class CreateUserValidatorTests
     public void Validate_ShouldReturnError_WhenEmailIsWhitespace()
     {
         // Arrange
-        var request = new CreateUserRequest("John Doe", "   ", "password123");
+        var request = new RegisterAccountRequest("John Doe", "   ", "password123", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);
@@ -68,7 +69,7 @@ public class CreateUserValidatorTests
     public void Validate_ShouldReturnError_WhenPasswordIsEmpty()
     {
         // Arrange
-        var request = new CreateUserRequest("John Doe", "test@example.com", "");
+        var request = new RegisterAccountRequest("John Doe", "test@example.com", "", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);
@@ -81,7 +82,7 @@ public class CreateUserValidatorTests
     public void Validate_ShouldReturnError_WhenPasswordIsWhitespace()
     {
         // Arrange
-        var request = new CreateUserRequest("John Doe", "test@example.com", "   ");
+        var request = new RegisterAccountRequest("John Doe", "test@example.com", "   ", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);
@@ -94,7 +95,7 @@ public class CreateUserValidatorTests
     public void Validate_ShouldReturnError_WhenPasswordIsTooShort()
     {
         // Arrange
-        var request = new CreateUserRequest("John Doe", "test@example.com", "12345");
+        var request = new RegisterAccountRequest("John Doe", "test@example.com", "12345", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);
@@ -107,7 +108,7 @@ public class CreateUserValidatorTests
     public void Validate_ShouldReturnMultipleErrors_WhenMultipleFieldsAreInvalid()
     {
         // Arrange
-        var request = new CreateUserRequest("", "", "123");
+        var request = new RegisterAccountRequest("", "", "123", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);
@@ -123,7 +124,7 @@ public class CreateUserValidatorTests
     public void Validate_ShouldReturnNoErrors_WhenRequestIsValid()
     {
         // Arrange
-        var request = new CreateUserRequest("John Doe", "test@example.com", "password123");
+        var request = new RegisterAccountRequest("John Doe", "test@example.com", "password123", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);
@@ -136,7 +137,7 @@ public class CreateUserValidatorTests
     public void Validate_ShouldReturnNoErrors_WhenPasswordIsExactly6Characters()
     {
         // Arrange
-        var request = new CreateUserRequest("John Doe", "test@example.com", "123456");
+        var request = new RegisterAccountRequest("John Doe", "test@example.com", "123456", AccountType.User);
 
         // Act
         var errors = _validator.Validate(request);

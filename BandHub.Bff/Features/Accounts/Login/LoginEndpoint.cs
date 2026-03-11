@@ -1,11 +1,13 @@
-﻿namespace BandHub.UserService.Features.Accounts.Login;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BandHub.Bff.Features.Accounts.Login;
 
 public static class LoginEndpoint
 {
-    public static IEndpointRouteBuilder MapLoginEndpoint(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder MapRegisterLoginEndpoint(this IEndpointRouteBuilder app)
     {
         app.MapPost("/accounts/login", async (
-            LoginRequest request,
+            [FromBody] LoginRequest request,
             LoginHandler handler,
             CancellationToken cancellationToken) =>
         {
@@ -14,9 +16,10 @@ public static class LoginEndpoint
                 var response = await handler.HandleAsync(request, cancellationToken);
                 return Results.Ok(response);
             }
-            catch (InvalidOperationException ex)
+            catch (HttpRequestException ex)
             {
-                return Results.Json(new { message = ex.Message }, statusCode: 401);
+                var statusCode = (int?)ex.StatusCode ?? 500;
+                return Results.Json(new { message = ex.Message }, statusCode: statusCode);
             }
         })
         .WithName("Login")

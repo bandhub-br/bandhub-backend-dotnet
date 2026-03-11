@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "Novo Perfil",
+    "Projects": [
+      {
+        "Path": "BandHub.UserService\\BandHub.UserService.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "BandHub.BandService\\BandHub.BandService.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "BandHub.Bff\\BandHub.Bff.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

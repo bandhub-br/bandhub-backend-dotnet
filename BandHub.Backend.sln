@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandHub.BandService", "Band
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandHub.BandService.UnitTests", "tests\BandHub.BandService.UnitTests\BandHub.BandService.UnitTests.csproj", "{423460A5-0861-446F-8CD3-6D7E04A8C427}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandHub.Bff", "BandHub.Bff\BandHub.Bff.csproj", "{A255FAD6-2CBD-427B-84A2-E424BD6C2F9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandHub.Bff.UnitTests", "tests\BandHub.Bff.UnitTests\BandHub.Bff.UnitTests.csproj", "{37675294-F205-417F-9B7A-C3FB3A828C55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,14 @@ Global
 		{423460A5-0861-446F-8CD3-6D7E04A8C427}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423460A5-0861-446F-8CD3-6D7E04A8C427}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{423460A5-0861-446F-8CD3-6D7E04A8C427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A255FAD6-2CBD-427B-84A2-E424BD6C2F9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A255FAD6-2CBD-427B-84A2-E424BD6C2F9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A255FAD6-2CBD-427B-84A2-E424BD6C2F9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A255FAD6-2CBD-427B-84A2-E424BD6C2F9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37675294-F205-417F-9B7A-C3FB3A828C55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37675294-F205-417F-9B7A-C3FB3A828C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37675294-F205-417F-9B7A-C3FB3A828C55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37675294-F205-417F-9B7A-C3FB3A828C55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +54,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{88901812-FBE5-4728-BDF2-1CE77C927C21} = {BA347339-E4A2-4A59-8AA7-6B9102BA01FF}
 		{423460A5-0861-446F-8CD3-6D7E04A8C427} = {BA347339-E4A2-4A59-8AA7-6B9102BA01FF}
+		{37675294-F205-417F-9B7A-C3FB3A828C55} = {BA347339-E4A2-4A59-8AA7-6B9102BA01FF}
 	EndGlobalSection
 EndGlobal

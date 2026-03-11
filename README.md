@@ -38,8 +38,8 @@ O **BandHub** é uma plataforma backend construída com arquitetura de microsser
 
 | Serviço | Porta | Banco de Dados | Descrição |
 |---------|-------|----------------|-----------|
-| **UserService** | `5293` | `users_db` | Gerenciamento de usuários |
-| **BandService** | `5081` | `bands_db` | Gerenciamento de bandas |
+| **UserService** | `5293` | `users_db` | Gerenciamento de contas (registro, login e consulta) |
+| **BandService** | `5081` | `bands_db` | Gerenciamento de bandas (vinculadas a contas) |
 
 ---
 
@@ -87,26 +87,32 @@ Feature/
 ```
 bandhub-backend-dotnet/
 │
-├── BandHub.UserService/                    # Microsserviço de Usuários
+├── BandHub.UserService/                    # Microsserviço de Contas
 │   ├── Features/
-│   │   └── Users/
-│   │       ├── CreateUser/
-│   │       │   ├── CreateUserEndpoint.cs
-│   │       │   ├── CreateUserHandler.cs
-│   │       │   ├── CreateUserRequest.cs
-│   │       │   ├── CreateUserResponse.cs
-│   │       │   └── CreateUserValidator.cs
-│   │       ├── GetUsers/
-│   │       │   ├── GetUsersEndpoint.cs
-│   │       │   ├── GetUsersHandler.cs
-│   │       │   └── GetUsersResponse.cs
+│   │   └── Accounts/
+│   │       ├── RegisterAccount/
+│   │       │   ├── RegisterAccountEndpoint.cs
+│   │       │   ├── RegisterAccountHandler.cs
+│   │       │   ├── RegisterAccountRequest.cs
+│   │       │   ├── RegisterAccountResponse.cs
+│   │       │   └── RegisterAccountValidator.cs
+│   │       ├── Login/
+│   │       │   ├── LoginEndpoint.cs
+│   │       │   ├── LoginHandler.cs
+│   │       │   ├── LoginRequest.cs
+│   │       │   └── LoginResponse.cs
+│   │       ├── GetAccounts/
+│   │       │   ├── GetAccountsEndpoint.cs
+│   │       │   ├── GetAccountsHandler.cs
+│   │       │   └── GetAccountsResponse.cs
 │   │       └── Domain/
-│   │           ├── User.cs
-│   │           └── IUserRepository.cs
+│   │           ├── Account.cs
+│   │           ├── AccountType.cs
+│   │           └── IAccountRepository.cs
 │   ├── Infrastructure/
 │   │   └── Persistence/
-│   │       ├── UserDbContext.cs
-│   │       └── UserRepository.cs
+│   │       ├── AccountDbContext.cs
+│   │       └── AccountRepository.cs
 │   ├── Common/
 │   │   └── DependencyInjection.cs
 │   ├── Migrations/
@@ -142,14 +148,23 @@ bandhub-backend-dotnet/
 │   └── BandHub.BandService.csproj
 │
 ├── tests/
-│   └── BandHub.UserService.UnitTests/     # Testes unitários do UserService
+│   ├── BandHub.UserService.UnitTests/     # Testes unitários do UserService
+│   │   └── Features/
+│   │       └── Accounts/
+│   │           ├── CreateAccount/
+│   │           │   ├── CreateAccountHandlerTests.cs
+│   │           │   └── CreateAccountValidatorTests.cs
+│   │           └── GetAccounts/
+│   │               └── GetAccountsHandlerTests.cs
+│   │
+│   └── BandHub.BandService.UnitTests/     # Testes unitários do BandService
 │       └── Features/
-│           └── Users/
-│               ├── CreateUser/
-│               │   ├── CreateUserHandlerTests.cs
-│               │   └── CreateUserValidatorTests.cs
-│               └── GetUsers/
-│                   └── GetUsersHandlerTests.cs
+│           └── Bands/
+│               ├── CreateBand/
+│               │   ├── CreateBandHandlerTests.cs
+│               │   └── CreateBandValidatorTests.cs
+│               └── GetBands/
+│                   └── GetBandsHandlerTests.cs
 │
 ├── bandhub-backend-dotnet.sln
 ├── .gitignore
@@ -258,9 +273,9 @@ Para o **BandService**:
 dotnet ef migrations add NomeDaMigration --project .\BandHub.BandService\BandHub.BandService.csproj --startup-project .\BandHub.BandService\BandHub.BandService.csproj
 ```
 
-> **Exemplo prático:** Imagine que você adicionou uma nova propriedade `Phone` na classe `User`:
+> **Exemplo prático:** Imagine que você adicionou uma nova propriedade `Phone` na classe `Account`:
 > ```bash
-> dotnet ef migrations add AddPhoneToUser --project .\BandHub.UserService\BandHub.UserService.csproj --startup-project .\BandHub.UserService\BandHub.UserService.csproj
+> dotnet ef migrations add AddPhoneToAccount --project .\BandHub.UserService\BandHub.UserService.csproj --startup-project .\BandHub.UserService\BandHub.UserService.csproj
 > ```
 > Isso vai gerar um arquivo em `Migrations/` com as instruções de `Up()` e `Down()`.
 
@@ -384,13 +399,22 @@ dotnet test --collect:"XPlat Code Coverage"
 Os testes seguem a mesma organização de pastas do projeto principal:
 
 ```
-tests/BandHub.UserService.UnitTests/
-└── Features/Users/
-    ├── CreateUser/
-    │   ├── CreateUserHandlerTests.cs   → Testa lógica de criação
-    │   └── CreateUserValidatorTests.cs → Testa validações de entrada
-    └── GetUsers/
-        └── GetUsersHandlerTests.cs     → Testa busca de usuários
+tests/
+├── BandHub.UserService.UnitTests/
+│   └── Features/Accounts/
+│       ├── CreateAccount/
+│       │   ├── CreateAccountHandlerTests.cs   → Testa lógica de registro
+│       │   └── CreateAccountValidatorTests.cs → Testa validações de entrada
+│       └── GetAccounts/
+│           └── GetAccountsHandlerTests.cs     → Testa busca por email
+│
+└── BandHub.BandService.UnitTests/
+    └── Features/Bands/
+        ├── CreateBand/
+        │   ├── CreateBandHandlerTests.cs       → Testa lógica de criação
+        │   └── CreateBandValidatorTests.cs     → Testa validações de entrada
+        └── GetBands/
+            └── GetBandsHandlerTests.cs         → Testa listagem de bandas
 ```
 
 ### Padrão dos testes
@@ -399,10 +423,10 @@ Todos os testes seguem o padrão **AAA (Arrange-Act-Assert)**:
 
 ```csharp
 [Fact]
-public async Task HandleAsync_ShouldCreateUser_WhenRequestIsValid()
+public async Task HandleAsync_ShouldCreateAccount_WhenRequestIsValid()
 {
     // Arrange - preparar dados e mocks
-    var request = new CreateUserRequest("John", "john@example.com", "password123");
+    var request = new RegisterAccountRequest("John", "john@example.com", "password123", AccountType.User);
 
     // Act - executar a ação
     var response = await _handler.HandleAsync(request, CancellationToken.None);
@@ -416,23 +440,27 @@ public async Task HandleAsync_ShouldCreateUser_WhenRequestIsValid()
 
 ## 📡 Endpoints da API
 
-### UserService
+### UserService (Accounts)
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| `POST` | `/users` | Criar um novo usuário |
-| `GET` | `/users` | Listar todos os usuários |
+| `POST` | `/accounts/register` | Registrar uma nova conta |
+| `POST` | `/accounts/login` | Autenticar uma conta |
+| `GET` | `/accounts/getaccountbyemail?email=` | Buscar conta por email |
 
-#### `POST /users`
+#### `POST /accounts/register`
 
 **Request:**
 ```json
 {
   "name": "John Doe",
   "email": "john@example.com",
-  "password": "password123"
+  "password": "password123",
+  "accountType": 1
 }
 ```
+
+> `accountType`: `1` = User, `2` = Band
 
 **Response (201):**
 ```json
@@ -440,6 +468,40 @@ public async Task HandleAsync_ShouldCreateUser_WhenRequestIsValid()
   "id": "550e8400-e29b-41d4-a716-446655440000",
   "name": "John Doe",
   "email": "john@example.com",
+  "accountType": "User",
+  "createdAt": "2026-03-07T15:30:00Z"
+}
+```
+
+#### `POST /accounts/login`
+
+**Request:**
+```json
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+**Response (200):**
+```json
+{
+  "accountId": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "John Doe",
+  "email": "john@example.com",
+  "accountType": "User"
+}
+```
+
+#### `GET /accounts/getaccountbyemail?email=john@example.com`
+
+**Response (200):**
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "John Doe",
+  "email": "john@example.com",
+  "accountType": 1,
   "createdAt": "2026-03-07T15:30:00Z"
 }
 ```
@@ -448,7 +510,7 @@ public async Task HandleAsync_ShouldCreateUser_WhenRequestIsValid()
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| `POST` | `/bands` | Criar uma nova banda |
+| `POST` | `/bands` | Criar uma nova banda (vinculada a uma conta) |
 | `GET` | `/bands` | Listar todas as bandas |
 
 #### `POST /bands`
@@ -456,9 +518,10 @@ public async Task HandleAsync_ShouldCreateUser_WhenRequestIsValid()
 **Request:**
 ```json
 {
+  "accountId": "550e8400-e29b-41d4-a716-446655440000",
   "name": "Arctic Monkeys",
-  "genre": "Indie Rock",
   "description": "Banda inglesa de indie rock",
+  "genre": "Indie Rock",
   "spotifyId": "7Ln80lUS6He07XvHI8qqHH"
 }
 ```
@@ -466,7 +529,8 @@ public async Task HandleAsync_ShouldCreateUser_WhenRequestIsValid()
 **Response (201):**
 ```json
 {
-  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "id": "660e8400-e29b-41d4-a716-446655440000",
+  "accountId": "550e8400-e29b-41d4-a716-446655440000",
   "name": "Arctic Monkeys",
   "genre": "Indie Rock",
   "description": "Banda inglesa de indie rock",
